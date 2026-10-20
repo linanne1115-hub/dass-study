@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>研究結果</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="results">
+<header class="site"><nav id="nav"></nav><div class="tools" id="tools"></div></header>
+<main>
+<h1 data-i="h"></h1>
+<p class="sub" data-i="sub"></p>
+<p class="note hid" id="srcrow"><span id="src"></span> <button id="reload">Reload</button></p>
+<details class="note hid" id="paste"><summary>Paste data</summary>
+<p>A1:P23</p>
+<textarea id="ta" rows="5" style="width:100%;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:8px"></textarea>
+<button id="apply">Apply</button></details>
+
+<div class="card">
+  <div class="ctrl">
+    <div><b data-i="ch"></b>
+      <label><input type="radio" name="chart" value="1" checked><span data-i="c1"></span></label>
+      <label><input type="radio" name="chart" value="2"><span data-i="c2"></span></label>
+    </div>
+    <div id="c1sel"><b data-i="s1"></b>
+      <label><input type="checkbox" class="cb" value="dep" checked><span data-n="dep"></span></label>
+      <label><input type="checkbox" class="cb" value="anx" checked><span data-n="anx"></span></label>
+      <label><input type="checkbox" class="cb" value="str" checked><span data-n="str"></span></label>
+    </div>
+    <div id="c2sel" style="display:none"><b data-i="s2"></b>
+      <label><input type="radio" name="sub" value="dep" checked><span data-n="dep"></span></label>
+      <label><input type="radio" name="sub" value="anx"><span data-n="anx"></span></label>
+      <label><input type="radio" name="sub" value="str"><span data-n="str"></span></label>
+    </div>
+  </div>
+  <div id="legend" class="note"></div>
+  <svg id="svg" viewBox="0 0 860 400" role="img"></svg>
+</div>
+<div class="card"><div id="tbl"></div></div>
+<div class="card note"><b data-i="nh"></b>
+  <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li><li data-h="n5"></li><li data-h="n6"></li></ul>
+</div>
+</main>
+<footer class="site" id="foot"></footer>
+<div id="tip"></div>
+<script>
+window.PAGE_TEXT={
+zh:{doc:"研究結果｜婚姻狀態與憂鬱、焦慮、壓力",h:"研究結果",
+sub:"DASS-42 共 42 題，受試者以 1–4 分評定過去一週的符合程度，憂鬱、焦慮、壓力各由其對應題目加總成分量表總分，總分越高代表症狀越嚴重。",
+ch:"圖表",c1:"平均數熱力圖",c2:"嚴重度分布",s1:"分量表（可複選）",s2:"分量表（單選）",
+hm:"顏色越深，平均總分越高",mean:"平均數",sd:"標準差",hs:"婚姻狀態",hn:"人數",cur:"目前",nh:"註解",
+n1:"<b>人數 n</b>：該婚姻狀態的樣本數。三組人數差異大（未婚最多，曾婚僅 100 人），曾婚的估計較不穩定。",
+n2:"<b>平均數與標準差（SD）</b>：平均數代表該組分量表總分的中心；SD 代表組內個別差異，SD 越大表示分數越分散。",
+n3:"<b>95% 信賴區間</b>：以「平均數 ± 1.96 × SD ÷ √n」計算，顯示於表格與滑鼠提示。兩組的區間若明顯不重疊，差異較可能不是抽樣誤差，但仍需以檢定（如 ANOVA）確認，不能只靠肉眼判斷。",
+n4:"<b>熱力圖顏色</b>：顏色越深，代表該組在該分量表的平均總分越高。色階範圍取自三個分量表、所有婚姻狀態的最小與最大平均數，只能看相對高低，不同分量表的分數不能直接視為同等嚴重。",
+n5:"<b>嚴重度比例</b>：各等級人數占該婚姻狀態總人數的百分比，每組五個等級加總為 100%。",
+n6:"<b>注意事項</b>：(1) 資料來自自願上網填答的便利樣本，不代表一般人口。(2) 本分析為相關性的描述，不能推論婚姻狀態造成症狀差異；年齡等因素可能混淆結果，已婚者平均年齡通常較高。(3) 量表為自陳式篩檢工具，不等於臨床診斷。"},
+en:{doc:"Results | Marital Status and Depression, Anxiety, and Stress",h:"Results",
+sub:"The DASS-42 has 42 items, each rated 1–4 for how much it applied over the past week; the Depression, Anxiety and Stress subscale totals are the sums of their items, and higher totals mean greater severity.",
+ch:"Chart",c1:"Mean heatmap",c2:"Severity distribution",s1:"Subscales (multi-select)",s2:"Subscale (single)",
+hm:"Darker = higher mean total score",mean:"Mean",sd:"SD",hs:"Marital status",hn:"n",cur:"Showing",nh:"Notes",
+n1:"<b>n</b>: the sample size of each marital status. Group sizes differ greatly (most are never married; only 100 are previously married), so estimates for the smallest group are less stable.",
+n2:"<b>Mean and standard deviation (SD)</b>: the mean is the center of a group's subscale total; the SD shows how spread out individual scores are within the group.",
+n3:"<b>95% confidence interval</b>: computed as mean ± 1.96 × SD ÷ √n and shown in the table and tooltip. Clearly non-overlapping intervals suggest the difference is less likely due to sampling error, but a test (e.g., ANOVA) is still needed; do not rely on eyeballing.",
+n4:"<b>Heatmap color</b>: darker cells mean a higher mean total score for that group on that subscale. The color scale spans the lowest to highest group mean across all three subscales, so it shows relative differences only; scores on different subscales are not directly equivalent in severity.",
+n5:"<b>Severity proportions</b>: the percentage of each marital status falling into each level; the five levels sum to 100% per group.",
+n6:"<b>Cautions</b>: (1) The data come from a self-selected online convenience sample and do not represent the general population. (2) This is a descriptive, correlational comparison and cannot show that marital status causes differences; confounders such as age may matter (married people are typically older). (3) The scale is a self-report screening tool, not a clinical diagnosis."}};
+</script>
+<script src="site.js"></script>
+<script>
+const LC=["#8fc9a0","#f2d56b","#f0a860","#e0675a","#9b2d3a"];
+const svg=document.getElementById("svg"),tip=document.getElementById("tip"),NS="http://www.w3.org/2000/svg";
+const lab=g=>getLang()=="en"?`${gname(g.n)} (n=${g.N})`:`${g.n}（n=${g.N}）`;
+const f=(x,d=2)=>x.toFixed(d),ci=(m,s,n)=>1.96*s/Math.sqrt(n);
+function el(tag,a,txt){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;svg.appendChild(e);return e}
+function hover(e,html){
+  e.addEventListener("mousemove",ev=>{tip.innerHTML=html;tip.style.display="block";tip.style.left=ev.clientX+14+"px";tip.style.top=ev.clientY+14+"px"});
+  e.addEventListener("mouseleave",()=>tip.style.display="none");
+}
+const sel1=()=>[...document.querySelectorAll(".cb:checked")].map(c=>c.value);
+const sel2=()=>document.querySelector("input[name=sub]:checked").value;
+const mode=()=>document.querySelector("input[name=chart]:checked").value;
+
+function chart1(){
+  const G=DASS.G,S=sel1(),W=860,L0=220,T=50,cw=Math.min(200,(W-L0-30)/S.length),chh=78;
+  const vals=G.flatMap(g=>["dep","anx","str"].map(k=>g[k][0])),lo=Math.min(...vals),hi=Math.max(...vals);
+  const H=T+G.length*chh+80,A=[239,231,251],B=[59,22,115];
+  const u=v=>(v-lo)/(hi-lo||1),rgb=v=>A.map((a,i)=>Math.round(a+(B[i]-a)*u(v)));
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  S.forEach((k,j)=>el("text",{x:L0+cw*(j+.5),y:T-18,"text-anchor":"middle",style:"font-weight:600"},nm(k)));
+  G.forEach((g,i)=>{
+    el("text",{x:L0-12,y:T+chh*i+chh/2+4,"text-anchor":"end"},lab(g));
+    S.forEach((k,j)=>{
+      const [m,s]=g[k],c=ci(m,s,g.N);
+      const r=el("rect",{x:L0+cw*j+2,y:T+chh*i+2,width:cw-4,height:chh-4,rx:8,fill:`rgb(${rgb(m)})`});
+      el("text",{x:L0+cw*(j+.5),y:T+chh*i+chh/2+7,"text-anchor":"middle",style:`font-size:20px;font-weight:600;pointer-events:none;fill:${u(m)>.5?"#fff":"#2a1048"}`},f(m,1));
+      hover(r,`<b>${nm(k)}</b>｜${gname(g.n)}<br>${tr("mean")}: ${f(m)}<br>${tr("sd")}: ${f(s)}<br>95% CI: ${f(m-c)}–${f(m+c)}`);
+    });
+  });
+  const ly=T+G.length*chh+22;
+  svg.insertAdjacentHTML("beforeend",`<defs><linearGradient id="pg"><stop offset="0" stop-color="rgb(${A})"/><stop offset="1" stop-color="rgb(${B})"/></linearGradient></defs>`);
+  el("rect",{x:L0,y:ly,width:240,height:14,rx:4,fill:"url(#pg)"});
+  el("text",{x:L0,y:ly+32},f(lo,1));
+  el("text",{x:L0+240,y:ly+32,"text-anchor":"end"},f(hi,1));
+  el("text",{x:L0+256,y:ly+12},tr("hm"));
+  document.getElementById("legend").innerHTML="";
+  let h=`<table><tr><th>${tr("hs")}</th><th>${tr("hn")}</th>${S.map(k=>`<th>${nm(k)} ${tr("mean")}</th><th>${nm(k)} SD</th><th>${nm(k)} 95% CI</th>`).join("")}</tr>`;
+  G.forEach(g=>{h+=`<tr><td>${gname(g.n)}</td><td>${g.N}</td>${S.map(k=>{const c=ci(...g[k],g.N);return `<td>${f(g[k][0])}</td><td>${f(g[k][1])}</td><td>${f(g[k][0]-c)}–${f(g[k][0]+c)}</td>`}).join("")}</tr>`});
+  document.getElementById("tbl").innerHTML=h+"</table>";
+}
+
+function chart2(){
+  const G=DASS.G,P=DASS.P,k=sel2(),W=860,H=300,L0=210,R=30,T=20,B=50,pw=W-L0-R,bh=60,gap=(H-T-B-bh*3)/2,x=v=>L0+v*pw,lv=LVL();
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  for(let v=0;v<=1.001;v+=.2){el("line",{x1:x(v),x2:x(v),y1:T,y2:H-B,class:"ax"});el("text",{x:x(v),y:H-B+20,"text-anchor":"middle"},Math.round(v*100)+"%")}
+  G.forEach((g,i)=>{
+    const yy=T+i*(bh+gap);let acc=0;
+    el("text",{x:L0-10,y:yy+bh/2+4,"text-anchor":"end"},lab(g));
+    P[k][i].forEach((p,j)=>{
+      const r=el("rect",{x:x(acc),y:yy,width:p*pw,height:bh,fill:LC[j]});
+      hover(r,`<b>${gname(g.n)}｜${nm(k)}</b><br>${lv[j]}: ${f(p*100,1)}%`);
+      if(p>.06)el("text",{x:x(acc)+p*pw/2,y:yy+bh/2+4,"text-anchor":"middle",style:"fill:#111;pointer-events:none"},f(p*100,1)+"%");
+      acc+=p;
+    });
+  });
+  document.getElementById("legend").innerHTML=lv.map((l,j)=>`<span class="sw" style="background:${LC[j]}"></span>${l}　`).join("")+`｜${tr("cur")}: ${nm(k)}`;
+  let h=`<table><tr><th>${tr("hs")}</th><th>${tr("hn")}</th>${lv.map(l=>`<th>${l}</th>`).join("")}</tr>`;
+  G.forEach((g,i)=>{h+=`<tr><td>${gname(g.n)}</td><td>${g.N}</td>${P[k][i].map(p=>`<td>${f(p*100,1)}%</td>`).join("")}</tr>`});
+  document.getElementById("tbl").innerHTML=h+"</table>";
+}
+
+function render(){
+  svg.innerHTML="";
+  const m=mode();
+  document.getElementById("c1sel").style.display=m=="1"?"":"none";
+  document.getElementById("c2sel").style.display=m=="2"?"":"none";
+  m=="1"?chart1():chart2();
+}
+document.querySelectorAll(".cb").forEach(c=>c.addEventListener("change",()=>{if(!sel1().length)c.checked=true;render()}));
+document.querySelectorAll("input[type=radio]").forEach(r=>r.addEventListener("change",render));
+window.onLang=render;window.onData=render;
+render();
+DASS.load().then(render);
+</script>
+</body>
+</html>

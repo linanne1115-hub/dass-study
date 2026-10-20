@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>婚姻狀態與憂鬱、焦慮、壓力的關係</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="index">
+<header class="site"><nav id="nav"></nav><div class="tools" id="tools"></div></header>
+<main>
+  <h1 data-i="h"></h1>
+  <p class="sub" data-i="intro"></p>
+
+  <h2 data-i="kh"></h2>
+  <div class="grid">
+    <div class="card stat"><b id="v1">–</b><div data-i="k1"></div><span data-i="k1d"></span></div>
+    <div class="card stat"><b id="v2">–</b><div data-i="k2"></div><span data-i="k2d"></span></div>
+    <div class="card stat"><b id="v3">–</b><div data-i="k3"></div><span data-i="k3d"></span></div>
+  </div>
+
+  <h2 data-i="eh"></h2>
+  <div class="grid">
+    <a class="card" href="results.html"><h2 data-i="e1"></h2><span class="note" data-i="e1d"></span></a>
+    <a class="card" href="ask.html"><h2 data-i="e2"></h2><span class="note" data-i="e2d"></span></a>
+    <a class="card" href="about.html"><h2 data-i="e3"></h2><span class="note" data-i="e3d"></span></a>
+  </div>
+</main>
+<footer class="site" id="foot"></footer>
+<div id="tip"></div>
+<script>
+window.PAGE_TEXT={
+zh:{doc:"婚姻狀態與憂鬱、焦慮、壓力的關係",h:"婚姻狀態與憂鬱、焦慮、壓力的關係",
+intro:"本研究使用網路版 DASS-42 的自願填答資料，比較不同婚姻狀態的人在憂鬱、焦慮與壓力三個分量表的總分與嚴重度分布，並說明這些結果能說明與不能說明的事。",
+kh:"重點數字",k1:"三組合計人數",k1d:"未婚、已婚、曾婚人數相加",k2:"憂鬱平均最高的組別",k2d:"憂鬱分量表平均總分",k3:"憂鬱「極重度」比例最高的組別",k3d:"占該組人數的百分比",
+eh:"前往各頁",e1:"研究結果",e1d:"熱力圖、嚴重度分布與統計表格",e2:"問答",e2d:"即將推出",e3:"關於研究",e3d:"資料來源、研究方法與樣本限制"},
+en:{doc:"Marital Status and Depression, Anxiety, and Stress",h:"Marital Status and Depression, Anxiety, and Stress",
+intro:"This study uses self-selected online DASS-42 responses to compare total scores and severity distributions on the Depression, Anxiety and Stress subscales across marital statuses, and explains what the results can and cannot tell us.",
+kh:"Key numbers",k1:"Total across the three groups",k1d:"Never married + married + previously married",k2:"Group with the highest depression mean",k2d:"Mean Depression subscale total",k3:"Group with the highest share of “extremely severe” depression",k3d:"Percentage of that group",
+eh:"Explore",e1:"Results",e1d:"Heatmap, severity distribution and statistics table",e2:"Q&A",e2d:"Coming soon",e3:"About the study",e3d:"Data source, methods and sample limitations"}};
+</script>
+<script src="site.js"></script>
+<script>
+function fill(){
+  const G=DASS.G,P=DASS.P,set=(id,v)=>document.getElementById(id).textContent=v;
+  let a=0,b=0;
+  G.forEach((g,i)=>{if(g.dep[0]>G[a].dep[0])a=i;if(P.dep[i][4]>P.dep[b][4])b=i});
+  set("v1",G.reduce((s,g)=>s+g.N,0).toLocaleString());
+  set("v2",gname(G[a].n)+" · "+G[a].dep[0].toFixed(1));
+  set("v3",gname(G[b].n)+" · "+(P.dep[b][4]*100).toFixed(1)+"%");
+}
+window.onLang=fill;window.onData=fill;
+fill();
+DASS.load().then(fill);
+</script>
+</body>
+</html>
